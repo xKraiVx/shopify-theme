@@ -1,0 +1,69 @@
+<script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+
+<article class="p-20 js-product-card" itemscope itemtype="https://schema.org/Product">
+  {% liquid
+    assign first_variant = product.variants.first
+    assign first_variant_primary_image = first_variant.featured_image
+    assign first_variant_secondary_image = first_variant.metafields.custom.secondary_image
+  %}
+
+  <div class="relative w-full h-[200px] overflow-hidden">
+    {%- if first_variant_primary_image -%}
+      <img
+        src="{{ first_variant_primary_image | image_url: width: 533 }}"
+        alt="{{ first_variant_primary_image.alt | escape }}"
+        class="absolute inset-0 w-full h-full object-cover js-product-card-primary-image transition-opacity duration-300"
+        width="200"
+        height="200"
+        itemprop="image"
+      >
+      {%- if first_variant_secondary_image != null -%}
+        <img
+          src="{{ first_variant_secondary_image | image_url: width: 533 }}"
+          alt="{{ first_variant_secondary_image.alt | escape }}"
+          class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-cover js-product-card-secondary-image transition-opacity duration-300"
+          width="200"
+          height="200"
+        >
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  <div class="variant-switcher d-flex justify-center gap-2">
+    {% for variant in product.variants %}
+      {% liquid
+        assign variant_primary_image = variant.featured_media
+        assign variant_secondary_image = variant.metafields.custom.secondary_image
+      %}
+      <button
+        class="js-variant-button relative inline-flex justify-center items-center h-[24px] w-[24px] rounded-full border-2 hover:opacity-80 transition-opacity {% if forloop.index == 1 %}border-blue-950{% else %}border-transparent{% endif %}"
+        data-variant-id="{{ variant.id }}"
+        data-variant-price="{{ variant.price | money }}"
+        data-variant-primary-image="{{ variant_primary_image | img_url: '200x200' }}"
+        data-variant-secondary-image="{{ variant_secondary_image | img_url: '200x200' }}"
+        onclick="handleVariantSwitch(this)"
+      >
+        <span
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 block w-[20px] h-[20px] rounded-full"
+          style="background-color: {{ variant.metafields.custom.variant_color }}"
+        ></span>
+      </button>
+    {% endfor %}
+  </div>
+  <p>{{ product.collections.first.title }}</p>
+  <h3 itemprop="name">{{ product.title }}</h3>
+  <div class="product-card__image mt-4">
+    <p>
+      Price:
+      <span
+        class="product-card__price-value js-product-card-price"
+        itemprop="offers"
+        itemscope
+        itemtype="https://schema.org/Offer"
+      >
+        <meta itemprop="priceCurrency" content="USD">
+        <span itemprop="price">{{ first_variant.price | money_without_currency }}</span>
+      </span>
+    </p>
+  </div>
+</article>
