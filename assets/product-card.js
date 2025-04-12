@@ -3,7 +3,7 @@ const getOnSaleLabel = (text) => {
     return "";
   }
 
-  return `<span class="absolute top-[20px] left-[20px] py-[6px] px-[12px] font-bold border-2 border-error rounded-full text-error z-10">
+  return `<span class="absolute top-[20px] left-[20px] py-[6px] px-[12px] font-bold border-[1px] border-error rounded-full text-error z-10">
         ${text}
       </span>`;
 };
@@ -55,7 +55,7 @@ function handleVariantSwitch(button) {
     btn.classList.add("border-transparent");
   });
 
-  button.classList.add("border-blue-950");
+  button.classList.add("border-primary");
   button.classList.remove("border-transparent");
   // #endregion
 
@@ -84,7 +84,6 @@ function handleVariantSwitch(button) {
 
   if (!!priceElement && +variantCompareAtPrice > +variantPrice) {
     const labelText = getOnSaleLabel(variantSaleLabelText);
-    console.log(labelText);
 
     productSaleLablelElement.innerHTML = labelText;
     priceElement.innerHTML = `<span class="line-through text-default" itemprop="price">${variantFormattedCompareAtPrice}</span><span class="text-error" itemprop="sale">${variantFormattedPrice}</span>`;
