@@ -1,0 +1,48 @@
+<script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+
+{% comment %}
+  Rendering the variant switcher for the product card.
+  This snippet is used to display the variant switcher for a product card.
+
+  For using:
+  1. Include this snippet in your product card template where you want the variant switcher to appear.
+  2. Add to product class `js-variant-switcher-product`.
+  3. Add to product price class `js-variant-switcher-product-price`.
+  4. Add to primary image class `js-variant-switcher-product-primary-image`.
+  5. Add to secondary image class `js-variant-switcher-product-secondary-image`.
+  6. Add to product link class `js-variant-switcher-product-link`.
+  7. Add to product sale label class `js-variant-switcher-product-sale-label`.
+{% endcomment %}
+
+{% liquid
+  assign product = product
+  assign class = class
+%}
+
+<div class="flex flex-wrap gap-2 {{ class }}">
+  {% for variant in product.variants %}
+    {% liquid
+      assign variant_primary_image = variant.featured_media
+      assign variant_secondary_image = variant.metafields.custom.secondary_image
+    %}
+    <button
+      class="js-variant-button relative inline-flex justify-center items-center h-[24px] w-[24px] rounded-full border-[1px] hover:opacity-80 transition-opacity {% if forloop.index == 1 %}border-primary{% else %}border-transparent{% endif %}"
+      data-variant-id="{{ variant.id }}"
+      data-variant-formatted-price="{{ variant.price | money }}"
+      data-variant-formatted-compare-at-price="{{ variant.compare_at_price | money }}"
+      data-variant-price="{{ variant.price }}"
+      data-variant-compare-at-price="{{ variant.compare_at_price }}"
+      data-variant-available="{{ variant.available }}"
+      data-variant-primary-image="{{ variant_primary_image | image_url: width: 350 }}"
+      data-variant-secondary-image="{{ variant_secondary_image | image_url: width: 350 }}"
+      data-variant-link="{{ product.url  }}?variant={{ variant.id }}"
+      data-variant-sale-label-text="{{ 'products.product.on_sale' | t }}"
+      onclick="handleVariantSwitch(this)"
+    >
+      <span
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 block w-[20px] h-[20px] rounded-full"
+        style="background-color: {{ variant.metafields.custom.variant_color }}"
+      ></span>
+    </button>
+  {% endfor %}
+</div>

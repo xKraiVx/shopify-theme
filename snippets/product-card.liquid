@@ -1,95 +1,33 @@
-<script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+{% liquid
+  assign product = product
+  assign first_variant = product.variants.first
+%}
 
-<article class="p-20 js-product-card" itemscope itemtype="https://schema.org/Product">
-  {% liquid
-    assign first_variant = product.variants.first
-    assign first_variant_primary_image = first_variant.featured_image
-    assign first_variant_secondary_image = first_variant.metafields.custom.secondary_image
+<article class="p-20 js-variant-switcher-product" itemscope itemtype="https://schema.org/Product">
+  <div class="relative js-variant-switcher-product-sale-label">
+    {% if first_variant.compare_at_price > first_variant.price %}
+      <span class="absolute top-[20px] left-[20px] py-[6px] px-[12px] font-bold border-[1px] border-error rounded-full text-error z-10">
+        {{ 'products.product.on_sale' | t }}
+      </span>
+    {% endif %}
+  </div>
+  {% render 'product-card-image',
+    product: product,
+    class: 'js-variant-switcher-product-link mb-4',
+    primary_image_class: 'js-variant-switcher-product-primary-image',
+    secondary_image_class: 'js-variant-switcher-product-secondary-image'
   %}
 
-  <a
-    href="{{ product.url }}"
-    class="block  overflow-hidden border-2 p-[20px] border-gray-200 rounded-lg js-product-card-link"
-  >
-    <div
-      class="relative w-full h-[340px]"
-    >
-      {%- if first_variant_primary_image -%}
-        <img
-          src="{{ first_variant_primary_image | image_url: width: 533 }}"
-          alt="{{ first_variant_primary_image.alt | escape }}"
-          class="absolute inset-0 w-full h-full object-cover js-product-card-primary-image transition-opacity duration-300"
-          width="200"
-          height="200"
-          itemprop="image"
-          loading="lazy"
-        >
-        {%- if first_variant_secondary_image != null -%}
-          <img
-            src="{{ first_variant_secondary_image | image_url: width: 533 }}"
-            alt="{{ first_variant_secondary_image.alt | escape }}"
-            class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-cover js-product-card-secondary-image transition-opacity duration-300"
-            width="200"
-            height="200"
-            loading="lazy"
-          >
-        {%- endif -%}
-      {%- endif -%}
-    </div>
-  </a>
+  {% render 'variant-switcher', product: product, class: 'mb-4' %}
 
-  <div class="variant-switcher flex flex-wrap gap-2">
-    {% for variant in product.variants %}
-      {% liquid
-        assign variant_primary_image = variant.featured_media
-        assign variant_secondary_image = variant.metafields.custom.secondary_image
-      %}
-      <button
-        class="js-variant-button relative inline-flex justify-center items-center h-[24px] w-[24px] rounded-full border-2 hover:opacity-80 transition-opacity {% if forloop.index == 1 %}border-blue-950{% else %}border-transparent{% endif %}"
-        data-variant-id="{{ variant.id }}"
-        data-variant-formatted-price="{{ variant.price | money }}"
-        data-variant-formatted-compare-at-price="{{ variant.compare_at_price | money }}"
-        data-variant-price="{{ variant.price }}"
-        data-variant-compare-at-price="{{ variant.compare_at_price }}"
-        data-variant-available="{{ variant.available }}"
-        data-variant-primary-image="{{ variant_primary_image | img_url: '200x200' }}"
-        data-variant-secondary-image="{{ variant_secondary_image | img_url: '200x200' }}"
-        data-variant-link="{{ product.url  }}?variant={{ variant.id }}"
-        onclick="handleVariantSwitch(this)"
-      >
-        <span
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 block w-[20px] h-[20px] rounded-full"
-          style="background-color: {{ variant.metafields.custom.variant_color }}"
-        ></span>
-      </button>
-    {% endfor %}
-  </div>
-  <p class="text-default">
-    {{ product.collections.first.title }}
-  </p>
-  <h3 itemprop="name" class="text-primary hover:opacity-80">
-    <a href="{{ product.url }}" class="block js-product-card-link">{{ product.title }}</a>
-  </h3>
-  <div class="product-card__image mt-4">
-    <p class="text-default">
-      <span
-        class="product-card__price-value"
-        itemprop="offers"
-        itemscope
-        itemtype="https://schema.org/Offer"
-      >
-        <meta itemprop="priceCurrency" content="USD">
-        <div class="js-product-card-price flex gap-2">
-          {% if first_variant.compare_at_price > first_variant.price %}
-            <span class="line-through text-default" itemprop="price">
-              {{- first_variant.compare_at_price | money -}}
-            </span>
-            <span class="text-error" itemprop="sale">{{ first_variant.price | money }}</span>
-          {% else %}
-            <span itemprop="price">{{ first_variant.price | money }}</span>
-          {% endif %}
-        </div>
-      </span>
+  <div class="flex gap-[6px] flex-col">
+    <p class="text-default text-[14px]">
+      {{ product.collections.first.title }}
     </p>
+    <h3 itemprop="name" class=" text-primary hover:opacity-80">
+      <a href="{{ product.url }}" class="block text-[16px] js-variant-switcher-product-link">{{ product.title }}</a>
+    </h3>
+
+    {% render 'product-card-price', product: product, price_class: 'js-variant-switcher-product-price' %}
   </div>
 </article>

@@ -1,6 +1,16 @@
+const getOnSaleLabel = (text) => {
+  if (!text || typeof text !== "string") {
+    return "";
+  }
+
+  return `<span class="absolute top-[20px] left-[20px] py-[6px] px-[12px] font-bold border-2 border-error rounded-full text-error z-10">
+        ${text}
+      </span>`;
+};
+
 function handleVariantSwitch(button) {
   // #region Variable Declarations
-  const productCard = button.closest(".js-product-card");
+  const productCard = button.closest(".js-variant-switcher-product");
   const variantPrimaryImage = button.getAttribute("data-variant-primary-image");
   const variantLink = button.getAttribute("data-variant-link");
 
@@ -18,23 +28,30 @@ function handleVariantSwitch(button) {
     "data-variant-compare-at-price"
   );
   const isVariantAvailable = button.getAttribute("data-variant-available");
-
-  const priceElement = productCard.querySelector(".js-product-card-price");
+  const variantSaleLabelText = button.getAttribute(
+    "data-variant-sale-label-text"
+  );
+  const priceElement = productCard.querySelector(
+    ".js-variant-switcher-product-price"
+  );
   const primaryImageElement = productCard.querySelector(
-    ".js-product-card-primary-image"
+    ".js-variant-switcher-product-primary-image"
   );
   const secondaryImageElement = productCard.querySelector(
-    ".js-product-card-secondary-image"
+    ".js-variant-switcher-product-secondary-image"
   );
   const productLinkElements = productCard.querySelectorAll(
-    ".js-product-card-link"
+    ".js-variant-switcher-product-link"
+  );
+  const productSaleLablelElement = productCard.querySelector(
+    ".js-variant-switcher-product-sale-label"
   );
   const variantButtons = productCard.querySelectorAll(".js-variant-button");
   // #endregion
 
   // #region Update Variant Button Styles
   variantButtons.forEach((btn) => {
-    btn.classList.remove("border-blue-950");
+    btn.classList.remove("border-primary");
     btn.classList.add("border-transparent");
   });
 
@@ -60,15 +77,21 @@ function handleVariantSwitch(button) {
 
   // #region Update Price
   if (!!priceElement && isVariantAvailable === "false") {
+    productSaleLablelElement.innerHTML = "";
     priceElement.innerHTML = `<span class="text-error">Sold Out</span>`;
     return;
   }
 
   if (!!priceElement && +variantCompareAtPrice > +variantPrice) {
+    const labelText = getOnSaleLabel(variantSaleLabelText);
+    console.log(labelText);
+
+    productSaleLablelElement.innerHTML = labelText;
     priceElement.innerHTML = `<span class="line-through text-default" itemprop="price">${variantFormattedCompareAtPrice}</span><span class="text-error" itemprop="sale">${variantFormattedPrice}</span>`;
 
     return;
   }
+  productSaleLablelElement.innerHTML = "";
   priceElement.innerHTML = `<span class="text-default">${variantFormattedPrice}</span>`;
   // #endregion
 }

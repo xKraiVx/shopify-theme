@@ -1,0 +1,39 @@
+{% liquid
+  assign class = class
+  assign primary_image_class = primary_image_class
+  assign secondary_image_class = secondary_image_class
+  assign first_variant = product.variants.first
+  assign first_variant_primary_image = first_variant.featured_image
+  assign first_variant_secondary_image = first_variant.metafields.custom.secondary_image
+%}
+
+<a
+  href="{{ product.url }}"
+  class="block  overflow-hidden border-[1px] p-[20px] border-gray-200 rounded-[10px] {{ class }}"
+>
+  <div
+    class="relative w-full h-[340px]"
+  >
+    {%- if first_variant_primary_image -%}
+      <img
+        src="{{ first_variant_primary_image | image_url: width: 350 }}"
+        alt="{{ first_variant_primary_image.alt | escape }}"
+        class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 bg-white {{ primary_image_class }}"
+        width="200"
+        height="200"
+        itemprop="image"
+        loading="lazy"
+      >
+      {%- if first_variant_secondary_image != null -%}
+        <img
+          src="{{ first_variant_secondary_image | image_url: width: 350 }}"
+          alt="{{ first_variant_secondary_image.alt | escape }}"
+          class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-contain transition-opacity duration-300 bg-white {{ secondary_image_class }}"
+          width="200"
+          height="200"
+          loading="lazy"
+        >
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</a>
