@@ -1,11 +1,23 @@
 function handleVariantSwitch(button) {
+  // #region Variable Declarations
   const productCard = button.closest(".js-product-card");
-  const variantPrice = button.getAttribute("data-variant-price");
   const variantPrimaryImage = button.getAttribute("data-variant-primary-image");
   const variantLink = button.getAttribute("data-variant-link");
+
   const variantSecondaryImage = button.getAttribute(
     "data-variant-secondary-image"
   );
+  const variantFormattedPrice = button.getAttribute(
+    "data-variant-formatted-price"
+  );
+  const variantFormattedCompareAtPrice = button.getAttribute(
+    "data-variant-formatted-compare-at-price"
+  );
+  const variantPrice = button.getAttribute("data-variant-price");
+  const variantCompareAtPrice = button.getAttribute(
+    "data-variant-compare-at-price"
+  );
+  const isVariantAvailable = button.getAttribute("data-variant-available");
 
   const priceElement = productCard.querySelector(".js-product-card-price");
   const primaryImageElement = productCard.querySelector(
@@ -18,7 +30,9 @@ function handleVariantSwitch(button) {
     ".js-product-card-link"
   );
   const variantButtons = productCard.querySelectorAll(".js-variant-button");
+  // #endregion
 
+  // #region Update Variant Button Styles
   variantButtons.forEach((btn) => {
     btn.classList.remove("border-blue-950");
     btn.classList.add("border-transparent");
@@ -26,13 +40,35 @@ function handleVariantSwitch(button) {
 
   button.classList.add("border-blue-950");
   button.classList.remove("border-transparent");
+  // #endregion
 
-  // Add logic to update the product card based on the selected variant
-  // Example: Update price and image on the page
+  // #region Update Product Links
   productLinkElements.forEach((link) => {
     link.setAttribute("href", variantLink);
   });
-  priceElement.innerHTML = variantPrice;
-  primaryImageElement.src = variantPrimaryImage;
-  secondaryImageElement.src = variantSecondaryImage;
+  // #endregion
+
+  // #region Update Images
+  if (!!primaryImageElement) {
+    primaryImageElement.src = variantPrimaryImage;
+  }
+
+  if (!!secondaryImageElement) {
+    secondaryImageElement.src = variantSecondaryImage;
+  }
+  // #endregion
+
+  // #region Update Price
+  if (!!priceElement && isVariantAvailable === "false") {
+    priceElement.innerHTML = `<span class="text-error">Sold Out</span>`;
+    return;
+  }
+
+  if (!!priceElement && +variantCompareAtPrice > +variantPrice) {
+    priceElement.innerHTML = `<span class="line-through text-default" itemprop="price">${variantFormattedCompareAtPrice}</span><span class="text-error" itemprop="sale">${variantFormattedPrice}</span>`;
+
+    return;
+  }
+  priceElement.innerHTML = `<span class="text-default">${variantFormattedPrice}</span>`;
+  // #endregion
 }

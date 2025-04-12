@@ -79,6 +79,10 @@
           endif
         %}
 
+        --COLOR-TEXT: {{ scheme.settings.text }};
+        --COLOR-ERROR: {{ scheme.settings.error }};
+        --COLOR-BORDER: {{ scheme.settings.border }};
+        --COLOR-PRIMARY: {{ scheme.settings.primary }};
         --color-foreground: {{ scheme.settings.text.red }},{{ scheme.settings.text.green }},{{ scheme.settings.text.blue }};
         --color-background-contrast: {{ background_color_contrast.red }},{{ background_color_contrast.green }},{{ background_color_contrast.blue }};
         --color-shadow: {{ scheme.settings.shadow.red }},{{ scheme.settings.shadow.green }},{{ scheme.settings.shadow.blue }};

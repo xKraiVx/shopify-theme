@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "shopify theme push --store learning-theme-development123.myshopify.com",
+    "pull": "shopify theme pull --store learning-theme-development123.myshopify.com",
     "dev:store": "shopify theme dev --store learning-theme-development123.myshopify.com",
     "dev:styles": "bunx tailwind -i ./src/tailwind.css -o ./assets/tailwind.css --watch"
   },

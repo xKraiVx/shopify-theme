@@ -42,9 +42,27 @@
         "definition": [
           {
             "type": "color",
+            "id": "primary",
+            "label": "Primary color",
+            "default": "#0A4874"
+          },
+          {
+            "type": "color",
+            "id": "error",
+            "label": "Error color",
+            "default": "#FF0000"
+          },
+          {
+            "type": "color",
             "id": "background",
             "label": "t:settings_schema.colors.settings.background.label",
             "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "border",
+            "label": "Border color",
+            "default": "#E8E8E8"
           },
           {
             "type": "color_background",

@@ -7,7 +7,19 @@ module.exports = {
     "./sections/*.liquid",
   ],
   theme: {
-    extend: {},
+    extend: {
+      textColor: {
+        default: "var(--COLOR-TEXT)",
+      },
+      colors: {
+        primary: "var(--COLOR-PRIMARY)",
+        border: "var(--COLOR-BORDER)",
+        error: "var(--COLOR-ERROR)",
+      },
+      fontFamily: {
+        serif: ["var(--font-body-family)", "serif"],
+      },
+    },
   },
   plugins: [],
 };

@@ -7,8 +7,13 @@
     assign first_variant_secondary_image = first_variant.metafields.custom.secondary_image
   %}
 
-  <div class="relative w-full h-[200px] overflow-hidden">
-    <a href="{{ product.url }}" class="block js-product-card-link">
+  <a
+    href="{{ product.url }}"
+    class="block  overflow-hidden border-2 p-[20px] border-gray-200 rounded-lg js-product-card-link"
+  >
+    <div
+      class="relative w-full h-[340px]"
+    >
       {%- if first_variant_primary_image -%}
         <img
           src="{{ first_variant_primary_image | image_url: width: 533 }}"
@@ -17,6 +22,7 @@
           width="200"
           height="200"
           itemprop="image"
+          loading="lazy"
         >
         {%- if first_variant_secondary_image != null -%}
           <img
@@ -25,13 +31,14 @@
             class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-cover js-product-card-secondary-image transition-opacity duration-300"
             width="200"
             height="200"
+            loading="lazy"
           >
         {%- endif -%}
       {%- endif -%}
-    </a>
-  </div>
+    </div>
+  </a>
 
-  <div class="variant-switcher d-flex justify-center gap-2">
+  <div class="variant-switcher flex flex-wrap gap-2">
     {% for variant in product.variants %}
       {% liquid
         assign variant_primary_image = variant.featured_media
@@ -40,7 +47,11 @@
       <button
         class="js-variant-button relative inline-flex justify-center items-center h-[24px] w-[24px] rounded-full border-2 hover:opacity-80 transition-opacity {% if forloop.index == 1 %}border-blue-950{% else %}border-transparent{% endif %}"
         data-variant-id="{{ variant.id }}"
-        data-variant-price="{{ variant.price | money }}"
+        data-variant-formatted-price="{{ variant.price | money }}"
+        data-variant-formatted-compare-at-price="{{ variant.compare_at_price | money }}"
+        data-variant-price="{{ variant.price }}"
+        data-variant-compare-at-price="{{ variant.compare_at_price }}"
+        data-variant-available="{{ variant.available }}"
         data-variant-primary-image="{{ variant_primary_image | img_url: '200x200' }}"
         data-variant-secondary-image="{{ variant_secondary_image | img_url: '200x200' }}"
         data-variant-link="{{ product.url  }}?variant={{ variant.id }}"
@@ -53,23 +64,31 @@
       </button>
     {% endfor %}
   </div>
-  <p>
+  <p class="text-default">
     {{ product.collections.first.title }}
   </p>
-  <h3 itemprop="name">
+  <h3 itemprop="name" class="text-primary hover:opacity-80">
     <a href="{{ product.url }}" class="block js-product-card-link">{{ product.title }}</a>
   </h3>
   <div class="product-card__image mt-4">
-    <p>
-      Price:
+    <p class="text-default">
       <span
-        class="product-card__price-value js-product-card-price"
+        class="product-card__price-value"
         itemprop="offers"
         itemscope
         itemtype="https://schema.org/Offer"
       >
         <meta itemprop="priceCurrency" content="USD">
-        <span itemprop="price">{{ first_variant.price | money_without_currency }}</span>
+        <div class="js-product-card-price flex gap-2">
+          {% if first_variant.compare_at_price > first_variant.price %}
+            <span class="line-through text-default" itemprop="price">
+              {{- first_variant.compare_at_price | money -}}
+            </span>
+            <span class="text-error" itemprop="sale">{{ first_variant.price | money }}</span>
+          {% else %}
+            <span itemprop="price">{{ first_variant.price | money }}</span>
+          {% endif %}
+        </div>
       </span>
     </p>
   </div>
