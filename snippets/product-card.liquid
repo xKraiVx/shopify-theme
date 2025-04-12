@@ -8,25 +8,27 @@
   %}
 
   <div class="relative w-full h-[200px] overflow-hidden">
-    {%- if first_variant_primary_image -%}
-      <img
-        src="{{ first_variant_primary_image | image_url: width: 533 }}"
-        alt="{{ first_variant_primary_image.alt | escape }}"
-        class="absolute inset-0 w-full h-full object-cover js-product-card-primary-image transition-opacity duration-300"
-        width="200"
-        height="200"
-        itemprop="image"
-      >
-      {%- if first_variant_secondary_image != null -%}
+    <a href="{{ product.url }}" class="block js-product-card-link">
+      {%- if first_variant_primary_image -%}
         <img
-          src="{{ first_variant_secondary_image | image_url: width: 533 }}"
-          alt="{{ first_variant_secondary_image.alt | escape }}"
-          class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-cover js-product-card-secondary-image transition-opacity duration-300"
+          src="{{ first_variant_primary_image | image_url: width: 533 }}"
+          alt="{{ first_variant_primary_image.alt | escape }}"
+          class="absolute inset-0 w-full h-full object-cover js-product-card-primary-image transition-opacity duration-300"
           width="200"
           height="200"
+          itemprop="image"
         >
+        {%- if first_variant_secondary_image != null -%}
+          <img
+            src="{{ first_variant_secondary_image | image_url: width: 533 }}"
+            alt="{{ first_variant_secondary_image.alt | escape }}"
+            class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-cover js-product-card-secondary-image transition-opacity duration-300"
+            width="200"
+            height="200"
+          >
+        {%- endif -%}
       {%- endif -%}
-    {%- endif -%}
+    </a>
   </div>
 
   <div class="variant-switcher d-flex justify-center gap-2">
@@ -41,6 +43,7 @@
         data-variant-price="{{ variant.price | money }}"
         data-variant-primary-image="{{ variant_primary_image | img_url: '200x200' }}"
         data-variant-secondary-image="{{ variant_secondary_image | img_url: '200x200' }}"
+        data-variant-link="{{ product.url  }}?variant={{ variant.id }}"
         onclick="handleVariantSwitch(this)"
       >
         <span
@@ -50,8 +53,12 @@
       </button>
     {% endfor %}
   </div>
-  <p>{{ product.collections.first.title }}</p>
-  <h3 itemprop="name">{{ product.title }}</h3>
+  <p>
+    {{ product.collections.first.title }}
+  </p>
+  <h3 itemprop="name">
+    <a href="{{ product.url }}" class="block js-product-card-link">{{ product.title }}</a>
+  </h3>
   <div class="product-card__image mt-4">
     <p>
       Price:
