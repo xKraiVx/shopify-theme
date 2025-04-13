@@ -17,21 +17,23 @@
     {%- if first_variant_primary_image -%}
       <img
         src="{{ first_variant_primary_image | image_url: width: 350 }}"
-        alt="{{ first_variant_primary_image.alt | escape }}"
+        alt="{{ product.title }}"
         class="absolute inset-0 w-full h-full object-contain transition-opacity duration-300 bg-white {{ primary_image_class }}"
         width="200"
         height="200"
         itemprop="image"
         loading="lazy"
+        itemprop="image"
       >
       {%- if first_variant_secondary_image != null -%}
         <img
           src="{{ first_variant_secondary_image | image_url: width: 350 }}"
-          alt="{{ first_variant_secondary_image.alt | escape }}"
+          alt="{{ product.title }}"
           class="absolute opacity-0 hover:opacity-100 inset-0 w-full h-full object-contain transition-opacity duration-300 bg-white {{ secondary_image_class }}"
           width="200"
           height="200"
           loading="lazy"
+          itemprop="image"
         >
       {%- endif -%}
     {%- endif -%}
