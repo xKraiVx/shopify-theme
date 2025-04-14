@@ -8,6 +8,14 @@ const getOnSaleLabel = (text) => {
       </span>`;
 };
 
+const getSoldOutLabel = (text) => {
+  if (!text || typeof text !== "string") {
+    return "";
+  }
+
+  return `<span class="text-error">${text}</span>`;
+};
+
 function handleVariantSwitch(button) {
   // #region Variable Declarations
   const productCard = button.closest(".js-variant-switcher-product");
@@ -30,6 +38,9 @@ function handleVariantSwitch(button) {
   const isVariantAvailable = button.getAttribute("data-variant-available");
   const variantSaleLabelText = button.getAttribute(
     "data-variant-sale-label-text"
+  );
+  const variantSoldLabelText = button.getAttribute(
+    "data-variant-sold-label-text"
   );
   const priceElement = productCard.querySelector(
     ".js-variant-switcher-product-price"
@@ -78,7 +89,7 @@ function handleVariantSwitch(button) {
   // #region Update Price
   if (!!priceElement && isVariantAvailable === "false") {
     productSaleLablelElement.innerHTML = "";
-    priceElement.innerHTML = `<span class="text-error">Sold Out</span>`;
+    priceElement.innerHTML = getSoldOutLabel(variantSoldLabelText);
     return;
   }
 

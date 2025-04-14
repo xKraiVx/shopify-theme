@@ -14,7 +14,9 @@
     >
       <meta itemprop="priceCurrency" content="{{shop.currency}}">
       <div class="flex gap-2 text-[14px] {{ price_class }}">
-        {% if first_variant.compare_at_price > first_variant.price %}
+        {% if first_variant.available == false %}
+          <span class="text-error">{{ 'products.product.sold_out' | t }}</span>
+        {% elsif first_variant.compare_at_price > first_variant.price %}
           <span class="line-through text-default" itemprop="price">
             {{- first_variant.compare_at_price | money -}}
           </span>

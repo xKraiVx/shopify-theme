@@ -5,7 +5,7 @@
 
 <article class="p-20 js-variant-switcher-product" itemscope itemtype="https://schema.org/Product">
   <div class="relative js-variant-switcher-product-sale-label">
-    {% if first_variant.compare_at_price > first_variant.price %}
+    {% if first_variant.compare_at_price > first_variant.price and first_variant.available == true %}
       <span class="absolute top-[20px] left-[20px] py-[6px] px-[12px] font-bold border-[1px] border-error rounded-full text-error z-10">
         {{ 'products.product.on_sale' | t }}
       </span>

@@ -37,6 +37,7 @@
       data-variant-secondary-image="{{ variant_secondary_image | image_url: width: 350 }}"
       data-variant-link="{{ product.url  }}?variant={{ variant.id }}"
       data-variant-sale-label-text="{{ 'products.product.on_sale' | t }}"
+      data-variant-sold-label-text="{{ 'products.product.sold_out' | t }}"
       onclick="handleVariantSwitch(this)"
     >
       <span
